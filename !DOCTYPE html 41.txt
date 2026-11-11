@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汉语口语课 · Урок 8 — Устный опрос</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --ink:#e8e6e1; --muted:#8b91a0; --accent:#e0563f; --gold:#d8a94e;
+    --jade:#4fae8d; --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 80% -10%, #232838 0%, var(--bg) 55%);
+    color:var(--ink); font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    min-height:100vh; padding-bottom:80px;
+  }
+  .han{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",serif}
+  header{max-width:980px;margin:0 auto;padding:34px 20px 10px;text-align:center}
+  header .seal{
+    display:inline-block;padding:6px 14px;border:2px solid var(--accent);color:var(--accent);
+    border-radius:8px;font-weight:700;letter-spacing:4px;font-size:14px;transform:rotate(-2deg);
+    margin-bottom:14px;
+  }
+  header h1{font-size:clamp(26px,4.5vw,40px);font-weight:800;letter-spacing:1px}
+  header h1 .han{color:var(--gold)}
+  header p{color:var(--muted);margin-top:8px;font-size:15px}
+  nav{max-width:980px;margin:26px auto 0;padding:0 20px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  nav button{
+    background:var(--panel);border:1px solid var(--line);color:var(--muted);
+    padding:10px 18px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:600;
+    transition:.2s;
+  }
+  nav button:hover{color:var(--ink);border-color:var(--gold)}
+  nav button.on{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 6px 20px rgba(224,86,63,.35)}
+  main{max-width:980px;margin:26px auto 0;padding:0 20px}
+  .view{display:none;animation:fade .35s ease}
+  .view.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{
+    background:linear-gradient(160deg,var(--panel2),var(--panel));
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px;margin-bottom:20px;box-shadow:0 14px 40px rgba(0,0,0,.35);
+  }
+  .card h2{font-size:20px;margin-bottom:4px}
+  .card h2 .han{color:var(--gold);margin-right:10px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .tool{
+    background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    padding:8px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s;
+  }
+  .tool:hover{border-color:var(--gold)}
+  .tool.on{background:var(--jade);border-color:var(--jade);color:#0f1115}
+  .line{
+    display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;
+    border:1px solid transparent;transition:.2s;cursor:pointer;
+  }
+  .line:hover{background:rgba(216,169,78,.06);border-color:var(--line)}
+  .line .who{
+    flex:0 0 38px;height:38px;border-radius:50%;display:grid;place-items:center;
+    font-weight:800;font-size:15px;margin-top:4px;
+  }
+  .line.a .who{background:rgba(224,86,63,.18);color:var(--accent);border:1px solid rgba(224,86,63,.5)}
+  .line.b .who{background:rgba(79,174,141,.16);color:var(--jade);border:1px solid rgba(79,174,141,.5)}
+  .line .txt{flex:1}
+  .line .zh{font-size:24px;line-height:1.5;font-weight:600}
+  .line .py{color:var(--gold);font-size:14px;margin-top:2px;font-style:italic}
+  .line .ru{color:var(--muted);font-size:14px;margin-top:4px}
+  .hide-py .py{display:none}.hide-zh .zh{display:none}.hide-ru .ru{display:none}
+  .play{
+    flex:0 0 auto;align-self:center;width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:var(--panel);color:var(--gold);
+    cursor:pointer;font-size:15px;transition:.15s;
+  }
+  .play:hover{border-color:var(--gold);transform:scale(1.08)}
+  /* word order game */
+  .slots,.tiles{display:flex;flex-wrap:wrap;gap:10px;min-height:56px}
+  .slots{border:2px dashed var(--line);border-radius:14px;padding:12px;margin-bottom:14px}
+  .slots.over{border-color:var(--jade)}
+  .tile{
+    padding:10px 16px;border-radius:12px;background:var(--panel);border:1px solid var(--line);
+    font-size:20px;font-weight:600;cursor:pointer;user-select:none;transition:.15s;font-family:inherit;color:var(--ink);
+  }
+  .tile:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .tile .py{display:block;font-size:11px;color:var(--gold);font-weight:400;font-style:italic}
+  .slot-tile{background:rgba(79,174,141,.12);border-color:rgba(79,174,141,.4)}
+  .btn{
+    display:inline-block;background:var(--accent);color:#fff;border:none;border-radius:12px;
+    padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;transition:.15s;
+  }
+  .btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .btn.ghost:hover{border-color:var(--gold)}
+  .btn.jade{background:var(--jade);color:#0f1115}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .msg{margin-top:12px;font-weight:600;min-height:22px}
+  .msg.ok{color:var(--jade)}.msg.bad{color:var(--accent)}
+  .score{
+    display:inline-flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);
+    border-radius:999px;padding:8px 18px;font-weight:700;color:var(--gold)
+  }
+  /* oral quiz */
+  .quiz-ru{font-size:clamp(20px,3.4vw,30px);font-weight:800;line-height:1.4;margin:8px 0 4px}
+  .quiz-tag{color:var(--muted);font-size:13px;letter-spacing:2px;text-transform:uppercase}
+  .answer{
+    margin-top:16px;background:rgba(216,169,78,.07);border:1px solid rgba(216,169,78,.3);
+    border-radius:14px;padding:18px;display:none;
+  }
+  .answer.show{display:block;animation:fade .3s}
+  .answer .zh{font-size:26px;font-weight:700}
+  .answer .py{color:var(--gold);font-style:italic;margin-top:4px}
+  .progress{height:8px;background:var(--panel);border-radius:99px;overflow:hidden;margin:18px 0 6px;border:1px solid var(--line)}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));width:0;transition:.4s}
+  /* flashcards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+  .fc{perspective:900px;height:150px;cursor:pointer}
+  .fc-in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+  .fc.flip .fc-in{transform:rotateY(180deg)}
+  .fc-f,.fc-b{
+    position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:12px;text-align:center;
+  }
+  .fc-f{background:linear-gradient(150deg,#222736,var(--panel));border:1px solid var(--line)}
+  .fc-b{background:linear-gradient(150deg,rgba(224,86,63,.2),var(--panel));border:1px solid rgba(224,86,63,.5);transform:rotateY(180deg)}
+  .fc-f .zh{font-size:36px;font-weight:700}
+  .fc .py{color:var(--gold);font-size:13px;font-style:italic}
+  .fc .ru-t{font-size:15px;font-weight:700}
+  .fc .pos{color:var(--muted);font-size:11px}
+  footer{max-width:980px;margin:40px auto 0;padding:0 20px;text-align:center;color:var(--muted);font-size:12px}
+  .big-zh{font-size:clamp(60px,14vw,120px);text-align:center;font-weight:800;color:var(--gold);opacity:.12;margin:30px 0 0;user-select:none}
+  @media(max-width:560px){
+    .line .zh{font-size:19px}
+    .tile{font-size:16px;padding:8px 12px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="seal han">口语课</div>
+  <h1><span class="han">第八课</span> · Говорим по-китайски</h1>
+  <p>Отработка диалогов «В ресторане», «Планы на день», «В магазине» — слушай, повторяй, собирай, отвечай вслух</p>
+</header>
+
+<nav id="nav">
+  <button data-v="v1" class="on">🍜 Диалоги</button>
+  <button data-v="v2">🧩 Собери фразу</button>
+  <button data-v="v3">🎤 Устный опрос</button>
+  <button data-v="v4">🃏 Карточки</button>
+</nav>
+
+<main>
+<!-- ===== DIALOGUES ===== -->
+<div class="view on" id="v1"></div>
+
+<!-- ===== WORD ORDER ===== -->
+<div class="view" id="v2">
+  <div class="card">
+    <h2><span class="han">连词成句</span>Собери предложение</h2>
+    <div class="sub">Нажимай на иероглифы в правильном порядке. Клик по плитке в поле ответа возвращает её назад.</div>
+    <div class="row" style="margin:0 0 16px">
+      <span class="score">Фраза <span id="woNum">1</span> / <span id="woTotal"></span></span>
+      <span class="score" style="color:var(--jade)">✓ <span id="woScore">0</span></span>
+    </div>
+    <div class="slots" id="woSlots"></div>
+    <div class="tiles" id="woTiles"></div>
+    <div class="row">
+      <button class="btn jade" id="woCheck">Проверить</button>
+      <button class="btn ghost" id="woSkip">Пропустить →</button>
+      <button class="btn ghost" id="woSpeak">🔊 Послушать</button>
+    </div>
+    <div class="msg" id="woMsg"></div>
+  </div>
+</div>
+
+<!-- ===== ORAL QUIZ ===== -->
+<div class="view" id="v3">
+  <div class="card">
+    <h2><span class="han">说一说</span>Устный опрос</h2>
+    <div class="sub">Вопрос или ситуация по-русски — ответь вслух по-китайски, затем открой эталон и оцени себя честно.</div>
+    <div class="progress"><i id="qBar"></i></div>
+    <div class="row" style="justify-content:space-between;margin-top:0">
+      <span class="quiz-tag" id="qTag">Вопрос 1</span>
+      <span class="score">✓ <span id="qScore">0</span> / <span id="qTotal"></span></span>
+    </div>
+    <div class="quiz-ru" id="qRu"></div>
+    <div class="sub" id="qHint"></div>
+    <div class="row">
+      <button class="btn" id="qShow">Показать эталон</button>
+      <button class="play" id="qPlay" title="Озвучить эталон" style="display:none">🔊</button>
+    </div>
+    <div class="answer" id="qAns">
+      <div class="zh han" id="qZh"></div>
+      <div class="py" id="qPy"></div>
+      <div class="ru" id="qEn" style="color:var(--muted);font-size:13px;margin-top:8px"></div>
+      <div class="row">
+        <span style="color:var(--muted);font-size:13px;align-self:center">Как ответил(а)?</span>
+        <button class="btn jade" id="qOk">✓ Верно</button>
+        <button class="btn ghost" id="qNo">✗ Не вышло</button>
+      </div>
+    </div>
+    <div class="msg" id="qMsg"></div>
+  </div>
+</div>
+
+<!-- ===== FLASHCARDS ===== -->
+<div class="view" id="v4">
+  <div class="card">
+    <h2><span class="han">生词</span>Словарь урока</h2>
+    <div class="sub">Нажми на карточку, чтобы перевернуть. 🔊 — озвучка.</div>
+    <div class="grid" id="fcGrid"></div>
+  </div>
+  <div class="big-zh han">好好学习，天天向上</div>
+</div>
+</main>
+
+<footer>Standard Course · Урок 08 · Сделано для устной практики · 加油！</footer>
+
+<script>
+/* ================= DATA ================= */
+const DIALOGUES = [
+ {title:"在饭馆儿", ru:"В ресторане", tag:"08-1", lines:[
+  {who:"A",zh:"你想喝什么？",py:"Nǐ xiǎng hē shénme?",ru:"Что ты хочешь пить?"},
+  {who:"B",zh:"我想喝茶。",py:"Wǒ xiǎng hē chá.",ru:"Я хочу пить чай."},
+  {who:"A",zh:"你想吃什么？",py:"Nǐ xiǎng chī shénme?",ru:"Что ты хочешь есть?"},
+  {who:"B",zh:"我想吃米饭。",py:"Wǒ xiǎng chī mǐfàn.",ru:"Я хочу есть рис."}
+ ]},
+ {title:"下午你想做什么？", ru:"Планы на день", tag:"08-2", lines:[
+  {who:"A",zh:"下午你想做什么？",py:"Xiàwǔ nǐ xiǎng zuò shénme?",ru:"Что ты хочешь делать днём?"},
+  {who:"B",zh:"下午我想去商店。",py:"Xiàwǔ wǒ xiǎng qù shāngdiàn.",ru:"Днём я хочу пойти в магазин."},
+  {who:"A",zh:"你想买什么？",py:"Nǐ xiǎng mǎi shénme?",ru:"Что ты хочешь купить?"},
+  {who:"B",zh:"我想买一个杯子。",py:"Wǒ xiǎng mǎi yí ge bēizi.",ru:"Я хочу купить чашку."}
+ ]},
+ {title:"在商店", ru:"В магазине", tag:"08-3", lines:[
+  {who:"A",zh:"你好！这个杯子多少钱？",py:"Nǐ hǎo! Zhège bēizi duōshao qián?",ru:"Здравствуйте! Сколько стоит эта чашка?"},
+  {who:"B",zh:"二十八块。",py:"Èrshíbā kuài.",ru:"Двадцать восемь юаней."},
+  {who:"A",zh:"那个杯子多少钱？",py:"Nàge bēizi duōshao qián?",ru:"Сколько стоит та чашка?"},
+  {who:"B",zh:"那个杯子十八块钱。",py:"Nàge bēizi shíbā kuài qián.",ru:"Та чашка стоит восемнадцать юаней."}
+ ]}
+];
+
+const WORDS = [
+ {zh:"下午",py:"xiàwǔ",pos:"сущ.",ru:"день, после полудня"},
+ {zh:"商店",py:"shāngdiàn",pos:"сущ.",ru:"магазин"},
+ {zh:"买",py:"mǎi",pos:"гл.",ru:"покупать"},
+ {zh:"个",py:"gè",pos:"счётн.",ru:"универсальный счётный классификатор"},
+ {zh:"杯子",py:"bēizi",pos:"сущ.",ru:"чашка, стакан"},
+ {zh:"想",py:"xiǎng",pos:"гл.",ru:"хотеть, думать"},
+ {zh:"喝",py:"hē",pos:"гл.",ru:"пить"},
+ {zh:"茶",py:"chá",pos:"сущ.",ru:"чай"},
+ {zh:"吃",py:"chī",pos:"гл.",ru:"есть, кушать"},
+ {zh:"米饭",py:"mǐfàn",pos:"сущ.",ru:"варёный рис"},
+ {zh:"去",py:"qù",pos:"гл.",ru:"идти, ехать (куда-то)"},
+ {zh:"做",py:"zuò",pos:"гл.",ru:"делать"},
+ {zh:"钱",py:"qián",pos:"сущ.",ru:"деньги"},
+ {zh:"多少",py:"duōshao",pos:"вопр.",ru:"сколько"},
+ {zh:"块",py:"kuài",pos:"сущ.",ru:"юань (коллоквиально)"},
+ {zh:"这",py:"zhè",pos:"мест.",ru:"это"},
+ {zh:"那",py:"nà",pos:"мест.",ru:"то"}
+];
+
+const ORDER_LINES = [];
+DIALOGUES.forEach(d=>d.lines.forEach(l=>ORDER_LINES.push(l)));
+
+const QUIZ = [
+ {ru:"Что ты хочешь пить?",hint:"Спрашиваем собеседника",zh:"你想喝什么？",py:"Nǐ xiǎng hē shénme?"},
+ {ru:"Я хочу пить чай.",hint:"Ответ",zh:"我想喝茶。",py:"Wǒ xiǎng hē chá."},
+ {ru:"Что ты хочешь есть?",hint:"Вопрос в ресторане",zh:"你想吃什么？",py:"Nǐ xiǎng chī shénme?"},
+ {ru:"Я хочу есть рис.",hint:"Ответ",zh:"我想吃米饭。",py:"Wǒ xiǎng chī mǐfàn."},
+ {ru:"Что ты хочешь делать днём?",hint:"Днём = 下午",zh:"下午你想做什么？",py:"Xiàwǔ nǐ xiǎng zuò shénme?"},
+ {ru:"Днём я хочу пойти в магазин.",hint:"Ответ",zh:"下午我想去商店。",py:"Xiàwǔ wǒ xiǎng qù shāngdiàn."},
+ {ru:"Что ты хочешь купить?",hint:"买 = покупать",zh:"你想买什么？",py:"Nǐ xiǎng mǎi shénme?"},
+ {ru:"Я хочу купить чашку.",hint:"Счётный классификатор 个",zh:"我想买一个杯子。",py:"Wǒ xiǎng mǎi yí ge bēizi."},
+ {ru:"Здравствуйте! Сколько стоит эта чашка?",hint:"这 = этот, 钱 = деньги",zh:"你好！这个杯子多少钱？",py:"Nǐ hǎo! Zhège bēizi duōshao qián?"},
+ {ru:"Двадцать восемь юаней.",hint:"28 = 二十八",zh:"二十八块。",py:"Èrshíbā kuài."},
+ {ru:"Сколько стоит та чашка?",hint:"那 = тот",zh:"那个杯子多少钱？",py:"Nàge bēizi duōshao qián?"},
+ {ru:"Та чашка стоит восемнадцать юаней.",hint:"18 = 十八",zh:"那个杯子十八块钱。",py:"Nàge bēizi shíbā kuài qián."},
+ {ru:"Сыграй роль продавца: назови цену — 35 юаней.",hint:"35 = 三十五",zh:"三十五块。",py:"Sānshíwǔ kuài."},
+ {ru:"Спроси, сколько стоят эти чашки (множ. намёк: 杯子们 не нужно — просто 杯子).",hint:"Вопрос о цене",zh:"这些杯子多少钱？",py:"Zhèxiē bēizi duōshao qián?"}
+];
+
+/* ================= TTS ================= */
+function speak(text,rate=0.85){
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="zh-CN"; u.rate=rate;
+    const v=speechSynthesis.getVoices().find(v=>v.lang.startsWith("zh"));
+    if(v)u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+speechSynthesis.onvoiceschanged=()=>{};
+
+/* ================= NAV ================= */
+document.getElementById("nav").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b)return;
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===b.dataset.v));
+});
+
+/* ================= DIALOGUES VIEW ================= */
+(function(){
+  const root=document.getElementById("v1");
+  root.innerHTML=`<div class="toolbar" style="margin-bottom:22px">
+    <button class="tool" data-t="py">Пиньинь: вкл</button>
+    <button class="tool" data-t="ru">Перевод: вкл</button>
+    <button class="tool" id="playAll">▶ Проиграть весь диалог</button>
+  </div>`;
+  DIALOGUES.forEach((d,i)=>{
+    const c=document.createElement("div"); c.className="card dlg"; c.dataset.i=i;
+    c.innerHTML=`<h2><span class="han">${d.title}</span>${d.ru}</h2>
+      <div class="sub">Диалог ${i+1} · трек ${d.tag}</div>`+
+      d.lines.map((l,j)=>`
+      <div class="line ${l.who.toLowerCase()}" data-i="${i}" data-j="${j}">
+        <div class="who">${l.who}</div>
+        <div class="txt">
+          <div class="zh han">${l.zh}</div>
+          <div class="py">${l.py}</div>
+          <div class="ru">${l.ru}</div>
+        </div>
+        <button class="play" data-i="${i}" data-j="${j}">🔊</button>
+      </div>`).join("");
+    root.appendChild(c);
+  });
+  root.addEventListener("click",e=>{
+    const p=e.target.closest(".play");
+    if(p){const l=DIALOGUES[p.dataset.i].lines[p.dataset.j];speak(l.zh);return;}
+    const ln=e.target.closest(".line");
+    if(ln){const l=DIALOGUES[ln.dataset.i].lines[ln.dataset.j];speak(l.zh);}
+  });
+  const pyBtn=root.querySelector('[data-t="py"]'), ruBtn=root.querySelector('[data-t="ru"]');
+  pyBtn.onclick=()=>{root.classList.toggle("hide-py");
+    pyBtn.textContent="Пиньинь: "+(root.classList.contains("hide-py")?"выкл":"вкл");
+    pyBtn.classList.toggle("on",!root.classList.contains("hide-py"));};
+  ruBtn.onclick=()=>{root.classList.toggle("hide-ru");
+    ruBtn.textContent="Перевод: "+(root.classList.contains("hide-ru")?"выкл":"вкл");
+    ruBtn.classList.toggle("on",!root.classList.contains("hide-ru"));};
+  pyBtn.classList.add("on");ruBtn.classList.add("on");
+  document.getElementById("playAll").onclick=()=>{
+    const i=+root.querySelector(".dlg").dataset.i; playAllIdx=0;
+    DIALOGUES.flatMap(d=>d.lines).forEach(()=>{});
+    const lines=DIALOGUES.flatMap(d=>d.lines);
+    (function rec(k){ if(k>=lines.length)return;
+      speak(lines[k].zh); 
+      setTimeout(()=>rec(k+1), 1600);
+    })(0);
+  };
+})();
+
+/* ================= WORD ORDER GAME ================= */
+(function(){
+  let idx=0,score=0,locked=false;
+  document.getElementById("woTotal").textContent=ORDER_LINES.length;
+  const slots=document.getElementById("woSlots"),tiles=document.getElementById("woTiles"),
+        msg=document.getElementById("woMsg");
+  function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function chars(zh){ // split, keeping punctuation attached
+    return zh.match(/[，。！？、]|[\u4e00-\u9fff]+|\d+/g)?.join("").split(/(?=[\u4e00-\u9fff])|(?<=[\u4e00-\u9fff])|(?=[，。！？])/).filter(Boolean) || [];
+  }
+  function load(){
+    locked=false; msg.textContent=""; msg.className="msg";
+    const L=ORDER_LINES[idx];
+    document.getElementById("woNum").textContent=idx+1;
+    const parts=chars(L.zh);
+    slots.innerHTML=""; tiles.innerHTML="";
+    shuffle(parts.map((p,i)=>({p,id:i}))).forEach(t=>{
+      const b=document.createElement("button"); b.className="tile"; b.dataset.p=t.p;
+      b.innerHTML=`<span class="han">${t.p}</span>`;
+      b.onclick=()=>{ if(locked)return;
+        if(b.parentElement===tiles){ slots.appendChild(b); b.classList.add("slot-tile"); }
+        else { tiles.appendChild(b); b.classList.remove("slot-tile"); }
+      };
+      tiles.appendChild(b);
+    });
+  }
+  document.getElementById("woCheck").onclick=()=>{
+    if(locked)return;
+    const got=[...slots.children].map(b=>b.dataset.p).join("");
+    const want=ORDER_LINES[idx].zh;
+    if(got===want){
+      locked=true; score++; document.getElementById("woScore").textContent=score;
+      msg.textContent="✓ Отлично! "+ORDER_LINES[idx].py+" — "+ORDER_LINES[idx].ru;
+      msg.className="msg ok"; speak(want);
+      setTimeout(()=>{ idx=(idx+1)%ORDER_LINES.length; load(); },2200);
+    } else {
+      msg.textContent="✗ Пока не так. Подсказка: "+ORDER_LINES[idx].py;
+      msg.className="msg bad";
+    }
+  };
+  document.getElementById("woSkip").onclick=()=>{ idx=(idx+1)%ORDER_LINES.length; load(); };
+  document.getElementById("woSpeak").onclick=()=>speak(ORDER_LINES[idx].zh);
+  load();
+})();
+
+/* ================= ORAL QUIZ ================= */
+(function(){
+  let order=[],pos=0,score=0,answered=false;
+  document.getElementById("qTotal").textContent=QUIZ.length;
+  function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  const els={ru:qRu,tag:qTag,hint:qHint,ans:qAns,zh:qZh,py:qPy,en:qEn,msg:qMsg,bar:qBar,play:qPlay,show:qShow};
+  function start(){ order=shuffle(QUIZ.map((_,i)=>i)); pos=0; score=0; document.getElementById("qScore").textContent=0; next(); }
+  function next(){
+    answered=false;
+    const q=QUIZ[order[pos]];
+    els.ru.textContent=q.ru; els.hint.textContent="💡 "+q.hint;
+    els.tag.textContent=`Вопрос ${pos+1} из ${QUIZ.length}`;
+    els.ans.classList.remove("show"); els.play.style.display="none"; els.show.style.display="";
+    els.msg.textContent=""; els.bar.style.width=(pos/QUIZ.length*100)+"%";
+    els.zh.textContent=q.zh; els.py.textContent=q.py; els.en.textContent="";
+    current=q;
+  }
+  let current=null;
+  els.show.onclick=()=>{ els.ans.classList.add("show"); els.play.style.display=""; els.show.style.display="none"; speak(current.zh); };
+  els.play.onclick=()=>speak(current.zh);
+  function grade(ok){
+    if(answered)return; answered=true;
+    if(ok){score++;document.getElementById("qScore").textContent=score;
+      els.msg.textContent="Красавчик! Идём дальше →";els.msg.className="msg ok";}
+    else{els.msg.textContent="Запомни: "+current.zh+" — повтори вслух 2 раза";els.msg.className="msg bad";
+      speak(current.zh,0.7);}
+    pos++;
+    if(pos>=QUIZ.length){
+      els.bar.style.width="100%";
+      setTimeout(()=>{
+        els.ru.textContent=`Итог: ${score} из ${QUIZ.length}`; 
+        els.ru.textContent= score>=QUIZ.length*0.8 ? "🏆 "+score+" / "+QUIZ.length+" — блестяще!" :
+          score>=QUIZ.length*0.5 ? "💪 "+score+" / "+QUIZ.length+" — хорошо, ещё круг!" :
+          "📖 "+score+" / "+QUIZ.length+" — повтори диалоги и попробуй снова";
+        els.hint.textContent=""; els.ans.classList.remove("show"); els.show.style.display="none";
+        els.tag.textContent="Финиш";
+        els.show.style.display=""; els.show.textContent="🔁 Пройти ещё раз";
+        els.show.onclick=start;
+      },900);
+      return;
+    }
+    setTimeout(next,1200);
+  }
+  document.getElementById("qOk").onclick=()=>grade(true);
+  document.getElementById("qNo").onclick=()=>grade(false);
+  start();
+})();
+
+/* ================= FLASHCARDS ================= */
+(function(){
+  const g=document.getElementById("fcGrid");
+  WORDS.forEach(w=>{
+    const d=document.createElement("div"); d.className="fc";
+    d.innerHTML=`<div class="fc-in">
+      <div class="fc-f"><div class="zh han">${w.zh}</div><div class="py">${w.py}</div><div class="pos">${w.pos}</div></div>
+      <div class="fc-b"><div class="ru-t">${w.ru}</div><div class="py">${w.py} · ${w.pos}</div><button class="play" style="margin-top:6px">🔊</button></div>
+    </div>`;
+    d.onclick=e=>{ if(e.target.closest(".play")){speak(w.zh);return;} d.classList.toggle("flip"); };
+    g.appendChild(d);
+  });
+})();
+</script>
+</body>
+</html>
